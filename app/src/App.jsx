@@ -8,7 +8,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>My Asdfpdsdsfdsfp</h1>
+      <h1>My Asdfpdsdasdssfdsfp</h1>
       <img src="/img.jpg" alt="Logo" width="200" />
     </div>
   );

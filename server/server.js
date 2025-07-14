@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import config from '../app/webpack.config.js';
+import config from '../mjs/mjs.config.js';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import morgan from 'morgan';
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV !== 'production') {
 // API route
 app.get('/api/hello', (req, res) => {
   const { name } = req.query;
-  res.json({ message: 'Hello from bacdaskend ' + name });
+  res.json({ message: 'Hello from bacdasasdkend ' + name });
 });
 
 // React app catch-all

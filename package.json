@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/server.js",
-    "build": "webpack --config app/webpack.config.js --mode production",
+    "build": "webpack --config mjs/mjs.config.js --mode production",
     "start": "npm run build && cross-env NODE_ENV=production node server/server.js"
   },
   "dependencies": {
