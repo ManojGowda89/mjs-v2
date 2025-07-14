@@ -1,4 +1,3 @@
-// mjs/server.config.js
 import express from 'express';
 import webpack from 'webpack';
 import dotenv from 'dotenv';

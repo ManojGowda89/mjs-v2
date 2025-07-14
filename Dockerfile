@@ -12,7 +12,6 @@ COPY public ./public
 RUN npm install
 RUN npm run build
 
-# Production image
 FROM node:20
 
 WORKDIR /app
