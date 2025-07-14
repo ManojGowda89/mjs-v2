@@ -5,25 +5,19 @@ WORKDIR /app
 COPY package*.json ./
 COPY .env .env
 
-
 COPY mjs ./mjs
 COPY app ./app
 COPY public ./public
 
-
-COPY app/.babelrc ./.babelrc
-
-
 RUN npm install
 RUN npm run build
 
-
+# Production image
 FROM node:20
 
 WORKDIR /app
 
 COPY --from=builder /app /app
-
 COPY server ./server
 
 ENV NODE_ENV=production

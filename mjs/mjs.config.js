@@ -9,7 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load and filter env vars
-const env = dotenv.config().parsed || {};
+const env = dotenv.config({ path: path.resolve(__dirname, '../.env') }).parsed || {};
+
 const reactEnv = Object.keys(env)
   .filter(key => key.startsWith('REACT_APP_'))
   .reduce((acc, key) => {
@@ -33,7 +34,13 @@ export default {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: true,
+            configFile: path.resolve(__dirname, './.babelrc'), // ✅ specify custom location
+          },
+        },
       },
       {
         test: /\.css$/i,
