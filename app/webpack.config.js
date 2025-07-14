@@ -8,10 +8,8 @@ import dotenv from 'dotenv';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load environment variables
+// Load and filter env vars
 const env = dotenv.config().parsed || {};
-
-// Filter only REACT_APP_ variables
 const reactEnv = Object.keys(env)
   .filter(key => key.startsWith('REACT_APP_'))
   .reduce((acc, key) => {
@@ -20,7 +18,7 @@ const reactEnv = Object.keys(env)
   }, {});
 
 export default {
-  entry: './app/src/index.jsx',
+  entry: './app/main.jsx',
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.js',
@@ -45,9 +43,9 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './app/public/index.html',
+      template: './app/index.html',
     }),
-    new webpack.DefinePlugin(reactEnv), // ✅ Injects dynamically
+    new webpack.DefinePlugin(reactEnv),
   ],
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
 };

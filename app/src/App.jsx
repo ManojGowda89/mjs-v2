@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { use, useEffect } from 'react';
 
 const App = () => {
-  console.log(process.env.REACT_APP_API_URL); // ✅ not import.meta.env
 
-  return <h1>Hello from MB64</h1>;
+  useEffect(() => {
+    console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+  }, []);
+
+  return (
+    <div>
+      <h1>My Asdfpdsdsfdsfp</h1>
+      <img src="/img.jpg" alt="Logo" width="200" />
+    </div>
+  );
 };
 
 export default App;
