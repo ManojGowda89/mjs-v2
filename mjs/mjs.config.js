@@ -1,3 +1,4 @@
+// mjs/mjs.config.js
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { fileURLToPath } from 'url';
@@ -8,7 +9,7 @@ import dotenv from 'dotenv';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load and filter env vars
+// Load environment variables
 const env = dotenv.config({ path: path.resolve(__dirname, '../.env') }).parsed || {};
 
 const reactEnv = Object.keys(env)
@@ -19,7 +20,10 @@ const reactEnv = Object.keys(env)
   }, {});
 
 export default {
-  entry: './app/main.jsx',
+  entry: [
+    'webpack-hot-middleware/client?reload=true&timeout=1000', // HMR client
+    './app/main.jsx',
+  ],
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.js',
@@ -29,6 +33,7 @@ export default {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  mode: process.env.NODE_ENV || 'development',
   module: {
     rules: [
       {
@@ -38,7 +43,7 @@ export default {
           loader: 'babel-loader',
           options: {
             babelrc: true,
-            configFile: path.resolve(__dirname, './.babelrc'), // ✅ specify custom location
+            configFile: path.resolve(__dirname, './.babelrc'),
           },
         },
       },
@@ -53,6 +58,6 @@ export default {
       template: './app/index.html',
     }),
     new webpack.DefinePlugin(reactEnv),
+    new webpack.HotModuleReplacementPlugin(), // HMR plugin
   ],
-  mode: process.env.NODE_ENV || 'development',
 };

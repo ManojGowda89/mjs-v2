@@ -1,3 +1,4 @@
+// mjs/server.config.js
 import express from 'express';
 import webpack from 'webpack';
 import dotenv from 'dotenv';
@@ -18,11 +19,7 @@ export const createApp = () => {
   const app = express();
   const PORT = process.env.PORT || 3000;
 
-  // Logging
   app.use(morgan('dev'));
-
-  // Public assets
-  app.use(express.static(path.join(__dirname, '../public')));
 
   let compiler;
 
@@ -34,12 +31,18 @@ export const createApp = () => {
         publicPath: config.output.publicPath,
       })
     );
+
     app.use(webpackHotMiddleware(compiler));
-  } else {
-    // Production build static files
+  }
+
+  // Static files
+  app.use(express.static(path.join(__dirname, '../public')));
+
+  if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../dist')));
   }
-  // React catch-all
+
+  // React App route
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
 
