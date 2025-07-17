@@ -1,4 +1,3 @@
-// mjs/mjs.config.js
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { fileURLToPath } from 'url';
@@ -10,8 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load environment variables
-const env = dotenv.config({ path: path.resolve(__dirname, '../.env') }).parsed || {};
+const env = dotenv.config({
+  path: path.resolve(__dirname, '../.env'),
+  quiet: true,
+}).parsed || {};
 
+// Prepare env vars for React
 const reactEnv = Object.keys(env)
   .filter(key => key.startsWith('REACT_APP_'))
   .reduce((acc, key) => {
@@ -19,11 +22,22 @@ const reactEnv = Object.keys(env)
     return acc;
   }, {});
 
+// ✅ Custom plugin to show "Build successful" in green
+class BuildSuccessPlugin {
+  apply(compiler) {
+    compiler.hooks.done.tap('BuildSuccessPlugin', () => {
+      console.log('\x1b[32m%s\x1b[0m', '✅ Build successful');
+    });
+  }
+}
+
+const isProd = process.env.NODE_ENV === 'production';
+
 export default {
   entry: [
-    'webpack-hot-middleware/client?reload=true&timeout=1000', // HMR client
+    !isProd && 'webpack-hot-middleware/client?reload=true&timeout=1000&quiet=true',
     './app/main.jsx',
-  ],
+  ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.js',
@@ -33,7 +47,7 @@ export default {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  mode: process.env.NODE_ENV || 'development',
+  mode: isProd ? 'production' : 'development',
   module: {
     rules: [
       {
@@ -58,6 +72,11 @@ export default {
       template: './app/index.html',
     }),
     new webpack.DefinePlugin(reactEnv),
-    new webpack.HotModuleReplacementPlugin(), // HMR plugin
-  ],
+    !isProd && new webpack.HotModuleReplacementPlugin(),
+    new BuildSuccessPlugin(),
+  ].filter(Boolean),
+  performance: {
+    hints: false,
+  },
+  stats: 'errors-warnings',
 };

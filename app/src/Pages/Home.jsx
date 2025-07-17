@@ -2,6 +2,8 @@ import React from "react";
 import Layout from "../Layout/Layout";
 
 export default function Home() {
+
+  console.log("Home component rendered");
   return (
     <Layout>
       <section style={{ padding: "2rem", textAlign: "center" }}>
